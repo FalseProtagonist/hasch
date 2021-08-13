@@ -138,8 +138,13 @@ Our hash version is coded in first 2 bits."
             (encode (:literal magics) (coerce-seq [tag value] md-create-fn write-handlers)))
 
           (satisfies? IRecord this)
-          (let [{:keys [tag value]} (ib/incognito-writer write-handlers this)]
-            (encode (:literal magics) (coerce-seq [tag value] md-create-fn write-handlers)))
+          (do 
+            ;; (println "about to try and coerce")
+            ;; (println "stack trace")
+            ;; (println (.-stack (js/Error.)))
+            ;; (println "end of stack trace")
+            (let [{:keys [tag value]} (ib/incognito-writer write-handlers this)]
+                (encode (:literal magics) (coerce-seq [tag value] md-create-fn write-handlers))))
 
           (satisfies? ISeq this)
           (encode (:seq magics) (coerce-seq this md-create-fn write-handlers))
